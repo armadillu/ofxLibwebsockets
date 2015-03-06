@@ -65,6 +65,7 @@ namespace ofxLibwebsockets {
     //--------------------------------------------------------------
     void Connection::send(const std::string& message)
     {
+        if ( ws == NULL) return;
         if ( message.size() == 0 ) return;
         int n = 0;
         
@@ -82,7 +83,11 @@ namespace ofxLibwebsockets {
             
         // we have a nice small frame, just send it
         } else {
-            n = libwebsocket_write(ws, &buf[LWS_SEND_BUFFER_PRE_PADDING], message.size(), LWS_WRITE_TEXT);
+            if ( lws_partial_buffered(ws) == 0 ){
+                n = libwebsocket_write(ws, &buf[LWS_SEND_BUFFER_PRE_PADDING], message.size(), LWS_WRITE_TEXT);
+            } else {
+                n = -1;
+            }
         }
         
         if (n < 0)
