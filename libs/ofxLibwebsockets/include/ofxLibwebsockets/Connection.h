@@ -84,6 +84,7 @@ namespace ofxLibwebsockets {
         // threading stuff
         vector<TextPacket> messages_text;
         vector<BinaryPacket> messages_binary;
+        ofMutex mutex;
     };
     
 

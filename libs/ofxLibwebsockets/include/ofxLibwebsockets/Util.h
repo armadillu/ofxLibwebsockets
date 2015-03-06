@@ -228,8 +228,16 @@ namespace ofxLibwebsockets {
                     conn->ws = ws;
                     conn->setupAddress();
                 }
+                
+                // first: check if we can't quite write or pipe is choked atm
+//                if (lws_partial_buffered(ws) || lws_send_pipe_choked(ws)) {
+//                    libwebsocket_callback_on_writable(context, ws);
+//                    break;
+//                }
+                
                 if (reactor){
-                    return reactor->_notify(conn, reason, (char*)data, len);                
+                    int ret = reactor->_notify(conn, reason, (char*)data, len);
+                    return ret;
                 } else {
                     return 0;
                 }
