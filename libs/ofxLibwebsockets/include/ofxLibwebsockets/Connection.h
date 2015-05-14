@@ -2,7 +2,7 @@
 //  Connection.h
 //  ofxLibwebsockets
 //
-//  Created by Brett Renfer on 4/11/12. 
+//  Created by Brett Renfer on 4/11/12.
 //
 
 #pragma once
@@ -39,7 +39,7 @@ namespace ofxLibwebsockets {
         void close();
         void send(const std::string& message);
         
-        template <class T> 
+        template <class T>
         void sendBinary( T& image ){
             int size = image.width * image.height * image.getPixelsRef().getNumChannels();
             sendBinary( (char *) image.getPixels(), size );
@@ -70,6 +70,8 @@ namespace ofxLibwebsockets {
         // MUST be called from main thread (e.g. client or server)
         void update();
         
+        bool isIdle();
+        
     protected:
         std::string client_ip;
         std::string client_name;
@@ -82,10 +84,14 @@ namespace ofxLibwebsockets {
         //std::vector<unsigned char> buf;
         
         // threading stuff
-        vector<TextPacket> messages_text;
-        vector<BinaryPacket> messages_binary;
-        ofMutex mutex;
+        std::deque<TextPacket> messages_text;
+        std::deque<BinaryPacket> messages_binary;
+        
+        void setIdle( bool isIdle=true );
+        
+    private:
+        bool idle;
     };
     
-
+    
 }
