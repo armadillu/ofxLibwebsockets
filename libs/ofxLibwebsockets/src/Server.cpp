@@ -202,12 +202,16 @@ namespace ofxLibwebsockets {
     {
         while (isThreadRunning())
         {
+			int sleep = 5;
+			ofSleepMillis(sleep);
+
             // update all connections
             for (int i=0; i<connections.size(); i++){
                 if ( connections[i] ){
                     connections[i]->update();
                 }
             }
+			ofSleepMillis(sleep);
             for (int i=0; i<protocols.size(); ++i){
                 if (protocols[i].second != NULL){
                     //lock();
