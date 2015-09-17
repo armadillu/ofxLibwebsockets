@@ -227,8 +227,10 @@ namespace ofxLibwebsockets {
     //--------------------------------------------------------------
     void Client::threadedFunction(){
         while ( isThreadRunning() ){
+			#ifdef TARGET_WIN32
 			int sleep = 5;
 			ofSleepMillis(sleep);
+			#endif
 
             for (int i=0; i<protocols.size(); ++i){
                 if (protocols[i].second != NULL){
@@ -237,7 +239,9 @@ namespace ofxLibwebsockets {
                     //unlock();
                 }
             }
+			#ifdef TARGET_WIN32
 			ofSleepMillis(sleep);
+			#endif
             if (context != NULL && lwsconnection != NULL){
                 //libwebsocket_callback_on_writable(context,lwsconnection);
                 connection->update();
